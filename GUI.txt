@@ -1,0 +1,2542 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+
+public class admin extends  JDialog{
+    private JPanel panel1;
+    private JButton button1;
+    private JButton button3;
+    private JButton button2;
+    private JTextField adm_ATvar;
+    private JTextField adm_typevar;
+    private JTextField adm_diplomavar;
+    private JButton button4;
+
+
+    public admin(JFrame parent)
+    {
+        super(parent);
+        setTitle("ADMIN");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+
+        button1.addActionListener(new ActionListener()  {//insert
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String adm_AT=adm_ATvar.getText();
+                String adm_type=adm_typevar.getText();
+                String adm_diploma=adm_diplomavar.getText();
+
+                if(adm_AT.isEmpty() || adm_type.isEmpty() || adm_diploma.isEmpty()){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+              }else{
+                  try{
+                  Class.forName("com.mysql.jdbc.Driver");
+                      Connection con = DriverManager.getConnection(
+                              "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                  //here travel_agency is database name, root is username and 28022002 password
+                      String sql="INSERT INTO admin(adm_AT,adm_type,adm_diploma) VALUES(?,?,?)";
+                      PreparedStatement st=con.prepareStatement(sql);
+                      st.setString(1,adm_ATvar.getText());
+                      st.setString(2,adm_typevar.getText());
+                      st.setString(3,adm_diplomavar.getText());
+                      st.executeUpdate();
+                      JOptionPane.showMessageDialog(null,"Recored added");
+                      con.close();
+                  }catch(Exception e){ System.out.println(e);}
+              }
+            }
+        });
+        button2.addActionListener(new ActionListener() {//delete
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String adm_AT=adm_ATvar.getText();
+                String adm_type=adm_typevar.getText();
+                String adm_diploma=adm_diplomavar.getText();
+
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM admin WHERE adm_AT=?  ";
+                    if( adm_AT.isEmpty() || adm_type.isEmpty()  || adm_diploma.isEmpty() ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,adm_ATvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        adm_ATvar.setText("");
+                        adm_typevar.setText("");
+                        adm_diplomavar.setText("");
+
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+            }
+
+        });
+        button3.addActionListener(new ActionListener() {//update
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String adm_AT=adm_ATvar.getText();
+                String adm_type=adm_typevar.getText();
+                String adm_diploma=adm_diplomavar.getText();
+
+                try{
+
+                    String sql="UPDATE admin SET adm_type='"+adm_type+"',adm_diploma='"+adm_diploma+"'"
+                            +"WHERE adm_AT="+adm_AT;
+                    if( adm_AT.isEmpty() || adm_type.isEmpty()  || adm_diploma.isEmpty() ){
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        adm_diplomavar.setText("");
+                        adm_typevar.setText("");
+                        adm_ATvar.setText("");
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        button4.addActionListener(new ActionListener() {//print
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });setVisible(true);
+    }
+}
+
+
+
+
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class branch extends JDialog {
+    private JPanel panel1;
+    private JTextField br_streetvar;
+    private JTextField br_numvar;
+    private JTextField br_cityvar;
+    private JButton PRINTButton;
+    private JButton UPDATEButton;
+    private JButton DELETEButton;
+    private JButton INSERTButton;
+    private JTextField br_codevar;
+
+    public branch(JFrame parent) {
+        super(parent);
+        setTitle("BRANCH");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+
+            INSERTButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent a) {
+                    String br_code=br_codevar.getText();
+                    String br_street=br_streetvar.getText();
+                    String br_num=br_numvar.getText();
+                    String br_city=br_cityvar.getText();
+
+                    if(br_code.isEmpty() || br_street.isEmpty() || br_num.isEmpty() || br_city.isEmpty() ){
+                        JOptionPane.showMessageDialog(null,"Enter all data");
+                        br_cityvar.setText("");
+                        br_streetvar.setText("");
+                        br_numvar.setText("");
+                        br_codevar.setText("");
+
+                    }else{
+                        try{
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection(
+                                    "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                            //here travel_agency is database name, root is username and 28022002 password
+                            String sql="INSERT INTO branch(br_code,br_street,br_num,br_city) VALUES(?,?,?,?)";
+                            PreparedStatement st=con.prepareStatement(sql);
+                            st.setString(1,br_codevar.getText());
+                            st.setString(2,br_streetvar.getText());
+                            st.setString(3,br_numvar.getText());
+                            st.setString(4,br_cityvar.getText());
+
+
+                            st.executeUpdate();
+                            JOptionPane.showMessageDialog(null,"Recored added");
+                            con.close();
+                        }catch(Exception e){ System.out.println(e);}
+                    }
+
+                }
+            });
+            DELETEButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent a) {
+                    String br_code=br_codevar.getText();
+                    String br_street=br_streetvar.getText();
+                    String br_num=br_numvar.getText();
+                    String br_city=br_cityvar.getText();
+
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="DELETE FROM branch WHERE br_code=? ";
+                        if( br_code.isEmpty() || br_street.isEmpty()  || br_num.isEmpty() || br_city.isEmpty()){
+                            PreparedStatement st=con.prepareStatement(sql);
+                            st.setString(1,br_codevar.getText());
+
+
+                            st.executeUpdate();
+                            JOptionPane.showMessageDialog(null,"Recored deleted");
+                            br_codevar.setText("");
+                            br_streetvar.setText("");
+                            br_numvar.setText("");
+                            br_cityvar.setText("");
+                            con.close();}
+                    }catch(Exception e){ System.out.println(e);}
+
+                }
+            });
+            UPDATEButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent a) {
+                    String br_code=br_codevar.getText();
+                    String br_street=br_streetvar.getText();
+                    String br_num=br_numvar.getText();
+                    String br_city=br_cityvar.getText();
+
+                    try{
+
+                        String sql="UPDATE branch SET br_num='"+br_num+"',br_street='"+br_street+"',br_city='"+br_city+"'"
+                                +"WHERE br_code="+br_code;
+                        if( br_city.isEmpty() || br_num.isEmpty()  || br_street.isEmpty() ){
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection(
+                                    "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                            PreparedStatement st=con.prepareStatement(sql);
+                            st.executeUpdate();
+                            JOptionPane.showMessageDialog(null,"Recored updated");
+                            br_codevar.setText("");
+                            br_cityvar.setText("");
+                            br_numvar.setText("");
+                            br_streetvar.setText("");
+                            con.close();
+
+                        }}catch(Exception e){ System.out.println(e);}
+
+                }
+            });
+            PRINTButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });setVisible(true);
+        }
+    }
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class destination extends  JDialog{
+    private JPanel panel1;
+    private JTextField dst_idvar;
+    private JTextField dst_namevar;
+    private JTextField dst_descrvar;
+    private JTextField dst_languagevar;
+    private JTextField dst_rtypevar;
+    private JButton PRINTButton;
+    private JButton UPDATEButton;
+    private JButton DELETEButton;
+    private JButton INSERTButton;
+    private JTextField dst_locationvar;
+
+
+    public destination(JFrame parent) {
+        super(parent);
+        setTitle("DESTINATION");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String dst_id=dst_idvar.getText();
+                String dst_name=dst_namevar.getText();
+                String dst_language=dst_languagevar.getText();
+                String dst_descr=dst_descrvar.getText();
+                String dst_location= dst_locationvar.getText();
+                String dst_rtype= dst_rtypevar.getText();
+
+                if(dst_id.isEmpty() || dst_descr.isEmpty() || dst_language.isEmpty() || dst_name.isEmpty() || dst_location.isEmpty() || dst_rtype.isEmpty()){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    dst_idvar.setText("");
+                    dst_descrvar.setText("");
+                    dst_namevar.setText("");
+                    dst_languagevar.setText("");
+                    dst_locationvar.setText("");
+                    dst_rtypevar.setText("");
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO destination(dst_id,dst_name,dst_descr,dst_language,dst_rtype,dst_location) VALUES(?,?,?,?,?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,dst_idvar.getText());
+                        st.setString(2,dst_namevar.getText());
+                        st.setString(3,dst_descrvar.getText());
+                        st.setString(4,dst_languagevar.getText());
+                        st.setString(5,dst_rtypevar.getText());
+                        st.setString(6,dst_locationvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+
+            }
+        });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String dst_id=dst_idvar.getText();
+                String dst_name=dst_namevar.getText();
+                String dst_language=dst_languagevar.getText();
+                String dst_descr=dst_descrvar.getText();
+                String dst_location= dst_locationvar.getText();
+                String dst_rtype= dst_rtypevar.getText();
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM destination WHERE dst_id=? ";
+                    if( dst_id.isEmpty() || dst_name.isEmpty()  || dst_language.isEmpty() || dst_descr.isEmpty() || dst_location.isEmpty() || dst_rtype.isEmpty()){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,dst_idvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        dst_idvar.setText("");
+                        dst_namevar.setText("");
+                        dst_descrvar.setText("");
+                        dst_languagevar.setText("");
+                        dst_rtypevar.setText("");
+                        dst_locationvar.setText("");
+                        con.close();}
+                }catch(Exception e){ System.out.println(a);}
+
+
+
+
+
+            }
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String dst_id=dst_idvar.getText();
+                String dst_name=dst_namevar.getText();
+                String dst_language=dst_languagevar.getText();
+                String dst_descr=dst_descrvar.getText();
+                String dst_location= dst_locationvar.getText();
+                String dst_rtype= dst_rtypevar.getText();
+                try{
+
+                    String sql="UPDATE destination SET dst_name='"+dst_name+"',dst_descr='"+dst_descr+"',dst_language='"+dst_language+"',dst_rtype='"+dst_rtype+"',dst_location='"+dst_location+"'"
+                            +"WHERE dst_id"+dst_id;
+                    if( dst_name.isEmpty() || dst_descr.isEmpty()  || dst_language.isEmpty() || dst_id.isEmpty()  || dst_rtype.isEmpty() || dst_location.isEmpty()){
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        dst_idvar.setText("");
+                        dst_rtypevar.setText("");
+                        dst_namevar.setText("");
+                        dst_locationvar.setText("");
+                        dst_languagevar.setText("");
+                        dst_descrvar.setText("");
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class driver extends  JDialog{
+    private JPanel panel1;
+    private JTextField drv_ATvar;
+    private JTextField drv_licvar;
+    private JTextField drv_routevar;
+    private JTextField drv_expevar;
+    private JButton INSERTButton;
+    private JButton DELETEButton;
+    private JButton UPDATEButton;
+    private JButton PRINTButton;
+
+    public driver(JFrame parent) {
+        super(parent);
+        setTitle("DRIVER");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+
+
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String drv_AT=drv_ATvar.getText();
+                String drv_license=drv_licvar.getText();
+                String drv_route=drv_routevar.getText();
+                String drv_experience=drv_expevar.getText();
+                if(drv_AT.isEmpty() || drv_license.isEmpty() ||drv_route.isEmpty() || drv_experience.isEmpty() ){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    drv_ATvar.setText("");
+                    drv_expevar.setText("");
+                    drv_licvar.setText("");
+                    drv_routevar.setText("");
+
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO driver(drv_AT,drv_license,drv_route,drv_experience) VALUES(?,?,?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,drv_ATvar.getText());
+                        st.setString(2,drv_licvar.getText());
+                        st.setString(3,drv_routevar.getText());
+                        st.setString(4,drv_expevar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+            }
+        });
+
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String drv_AT=drv_ATvar.getText();
+                String drv_license=drv_licvar.getText();
+                String drv_route=drv_routevar.getText();
+                String drv_experience=drv_expevar.getText();
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM driver WHERE drv_AT=? ";
+                    if( drv_experience.isEmpty() || drv_route.isEmpty()  || drv_license.isEmpty()  ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,drv_ATvar.getText());
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                       drv_ATvar.setText("");
+                        drv_expevar.setText("");
+                        drv_licvar.setText("");
+                        drv_routevar.setText("");
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String drv_AT=drv_ATvar.getText();
+                String drv_license=drv_licvar.getText();
+                String drv_route=drv_routevar.getText();
+                String drv_experience=drv_expevar.getText();
+                try{
+
+                    String sql="UPDATE driver SET drv_license='"+drv_license+"',drv_route='"+drv_route+"',drv_experience='"+drv_experience+"'"
+                            +"WHERE drv_AT="+drv_AT;
+                    if(  drv_route.isEmpty()  || drv_experience.isEmpty()  || drv_license.isEmpty() ){
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        drv_routevar.setText("");
+                        drv_licvar.setText("");
+                        drv_expevar.setText("");
+                        drv_ATvar.setText("");
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class event extends  JDialog{
+    private JPanel panel1;
+    private JTextField evtrvar;
+    private JTextField evstartvar;
+    private JTextField evendvar;
+    private JTextField evdescrvar;
+    private JButton INSERTButton;
+    private JButton PRINTButton;
+    private JButton DELETEButton;
+    private JButton UPDATEButton;
+
+    public event(JFrame parent){
+        super(parent);
+        setTitle("EVENT");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String ev_id=evtrvar.getText();
+                String ev_start=evstartvar.getText();
+                String ev_end=evendvar.getText();
+                String ev_descr=evdescrvar.getText();
+                if(ev_end.isEmpty() || ev_id.isEmpty() || ev_descr.isEmpty() || ev_start.isEmpty() ){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    evdescrvar.setText("");
+                    evendvar.setText("");
+                    evtrvar.setText("");
+                    evdescrvar.setText("");
+
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO event(ev_tr_id,ev_start,ev_end,ev_descr) VALUES(?,?,?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,evtrvar.getText());
+                        st.setString(2,evstartvar.getText());
+                        st.setString(3,evendvar.getText());
+                        st.setString(4,evdescrvar.getText());
+
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+
+            }
+        });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String ev_id=evtrvar.getText();
+                String ev_start=evstartvar.getText();
+                String ev_end=evendvar.getText();
+                String ev_descr=evdescrvar.getText();
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM event WHERE ev_tr_id=? ";
+                    if( ev_end.isEmpty() || ev_start.isEmpty()  || ev_descr.isEmpty() ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1, evtrvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        evtrvar.setText("");
+                        evendvar.setText("");
+                        evstartvar.setText("");
+                        evdescrvar.setText("");
+
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String ev_id=evtrvar.getText();
+                String ev_start=evstartvar.getText();
+                String ev_end=evendvar.getText();
+                String ev_descr=evdescrvar.getText();
+                try{
+
+                    String sql="UPDATE event SET ev_start='"+ev_start+"',ev_end='"+ev_end+"',ev_descr='"+ev_descr+"'"
+                            +"WHERE ev_tr_id="+ev_id;
+                    if( ev_end.isEmpty() || ev_descr.isEmpty()  || ev_start.isEmpty() ){
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        evendvar.setText("");
+                        evstartvar.setText("");
+                        evtrvar.setText("");
+                        evdescrvar.setText("");
+
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class guide extends  JDialog{
+    private JPanel panel1;
+    private JTextField gui_ATvar;
+    private JTextField gui_langvar;
+    private JButton PRINTButton;
+    private JButton UPDATEButton;
+    private JButton DELETEButton;
+    private JButton INSERTButton;
+
+    public guide(JFrame parent) {
+        super(parent);
+        setTitle("GUIDE");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String gui_AT=gui_ATvar.getText();
+                String gui_language=gui_langvar.getText();
+                if(gui_AT.isEmpty() || gui_language.isEmpty()  ){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    gui_ATvar.setText("");
+                    gui_langvar.setText("");
+
+
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO guide(gui_AT,gui_cv) VALUES(?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,gui_ATvar.getText());
+                        st.setString(2,gui_langvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+
+            }
+        });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String gui_AT=gui_ATvar.getText();
+                String gui_language=gui_langvar.getText();
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM guide WHERE gui_AT=? ";
+                    if( gui_language.isEmpty() || gui_AT.isEmpty()    ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,gui_ATvar.getText());
+
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        gui_ATvar.setText("");
+                        gui_langvar.setText("");
+
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String gui_AT=gui_ATvar.getText();
+                String gui_language=gui_langvar.getText();
+                try{
+
+                    String sql="UPDATE guide SET gui_cv='"+gui_language+"'"
+                            +"WHERE gui_AT="+gui_AT;
+                    if( gui_AT.isEmpty() || gui_language.isEmpty()   ){
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        gui_langvar.setText("");
+                        gui_ATvar.setText("");
+
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class it extends  JDialog{
+    private JPanel panel1;
+    private JTextField itATvar;
+    private JTextField itpassvar;
+    private JTextField startvar;
+    private JTextField endvar;
+    private JButton UPDATEButton;
+    private JButton PRINTButton;
+    private JButton INSERTButton;
+    private JButton DELETEButton;
+
+    public it(JFrame parent) {
+        super(parent);
+        setTitle("IT");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String it_AT=itATvar.getText();
+                String it_pass=itpassvar.getText();
+                String it_start=startvar.getText();
+                String it_end=endvar.getText();
+                if(it_AT.isEmpty() || it_pass.isEmpty() || it_start.isEmpty() || it_end.isEmpty() ){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    itATvar.setText("");
+                    itpassvar.setText("");
+                    endvar.setText("");
+                    startvar.setText("");
+
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO it(it_AT,it_password,id_start,it_end) VALUES(?,?,?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,itATvar.getText());
+                        st.setString(2,itpassvar.getText());
+                        st.setString(3,startvar.getText());
+                        st.setString(4,endvar.getText());
+
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+
+            }
+        });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String it_AT=itATvar.getText();
+                String it_pass=itpassvar.getText();
+                String it_start=startvar.getText();
+                String it_end=endvar.getText();
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM it WHERE it_AT=? ";
+                    if( it_pass.isEmpty() || it_end.isEmpty()  || it_start.isEmpty() ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,itpassvar.getText());
+
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        itpassvar.setText("");
+                        itATvar.setText("");
+                        endvar.setText("");
+                        startvar.setText("");
+
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String it_AT=itATvar.getText();
+                String it_pass=itpassvar.getText();
+                String it_start=startvar.getText();
+                String it_end=endvar.getText();
+                try{
+
+                    String sql="UPDATE it SET it_password='"+it_pass+"',it_start='"+it_start+"',it_end='"+it_end+"'"
+                            +"WHERE it_AT="+it_AT;
+                    if( it_end.isEmpty() || it_start.isEmpty()  || it_pass.isEmpty() ){
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        itATvar.setText("");
+                        itpassvar.setText("");
+                        endvar.setText("");
+                        startvar.setText("");
+
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+public class User {
+    public String username;
+    public String password;
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class trip extends  JDialog{
+    private JPanel panel1;
+    private JTextField tridvar;
+    private JTextField departurevar;
+    private JTextField returnvar;
+    private JTextField seatsvar;
+    private JTextField costvar;
+    private JTextField brcodevar;
+    private JTextField guivar;
+    private JTextField drvvar;
+    private JButton DELETEButton;
+    private JButton UPDATEButton;
+    private JButton PRINTButton;
+    private JButton INSERTButton;
+
+    public trip(JFrame parent) {
+        super(parent);
+        setTitle("TRIP");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+        INSERTButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String tr_id=tridvar.getText();
+                String tr_departure=departurevar.getText();
+                String tr_return=returnvar.getText();
+                String tr_maxseats=seatsvar.getText();
+                String tr_cost=costvar.getText();
+                String tr_gui_AT=guivar.getText();
+                String tr_drv_AT=drvvar.getText();
+                String tr_br_code=brcodevar.getText();
+
+                    if(tr_br_code.isEmpty() || tr_cost.isEmpty() || tr_departure.isEmpty() || tr_gui_AT.isEmpty() || tr_return.isEmpty() || tr_drv_AT.isEmpty() || tr_maxseats.isEmpty()){
+                        JOptionPane.showMessageDialog(null,"Enter all data");
+                        tridvar.setText("");
+                        seatsvar.setText("");
+                        costvar.setText("");
+                        departurevar.setText("");
+                        returnvar.setText("");
+                        drvvar.setText("");
+                        guivar.setText("");
+                        brcodevar.setText("");
+                    }else{
+                        try{
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection(
+                                    "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                            //here travel_agency is database name, root is username and 28022002 password
+                            String sql="INSERT INTO trip(tr_id,tr_departure,tr_return,tr_maxseats,tr_cost,tr_br_code,tr_gui_AT,tr_drv_AT) VALUES(?,?,?,?,?,?,?,?)";
+                            PreparedStatement st=con.prepareStatement(sql);
+                            st.setString(1,tridvar.getText());
+                            st.setString(2,departurevar.getText());
+                            st.setString(3,returnvar.getText());
+                            st.setString(4,seatsvar.getText());
+                            st.setString(5,costvar.getText());
+                            st.setString(6,brcodevar.getText());
+                            st.setString(7,guivar.getText());
+                            st.setString(8,drvvar.getText());
+
+                            st.executeUpdate();
+                            JOptionPane.showMessageDialog(null,"Recored added");
+                            con.close();
+                        }catch(Exception e){ System.out.println(e);}
+                    }
+
+            }
+        });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String tr_id=tridvar.getText();
+                String tr_departure=departurevar.getText();
+                String tr_return=returnvar.getText();
+                String tr_maxseats=seatsvar.getText();
+                String tr_cost=costvar.getText();
+                String tr_gui_AT=guivar.getText();
+                String tr_drv_AT=drvvar.getText();
+                String tr_br_code=brcodevar.getText();
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="DELETE FROM trip WHERE tr_id=? ";
+                        if( tr_drv_AT.isEmpty() || tr_maxseats.isEmpty()  || tr_return.isEmpty() || tr_gui_AT.isEmpty() || tr_departure.isEmpty()   || tr_cost.isEmpty() || tr_br_code.isEmpty() ){
+                            PreparedStatement st=con.prepareStatement(sql);
+                            st.setString(1,tridvar.getText());
+
+                            st.executeUpdate();
+                            JOptionPane.showMessageDialog(null,"Recored deleted");
+                            guivar.setText("");
+                            drvvar.setText("");
+                            brcodevar.setText("");
+                            returnvar.setText("");
+                            departurevar.setText("");
+                            seatsvar.setText("");
+                            costvar.setText("");
+                            tridvar.setText("");
+                            con.close();}
+                    }catch(Exception e){ System.out.println(e);}
+
+                }
+
+
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String tr_id=tridvar.getText();
+                String tr_departure=departurevar.getText();
+                String tr_return=returnvar.getText();
+                String tr_maxseats=seatsvar.getText();
+                String tr_cost=costvar.getText();
+                String tr_gui_AT=guivar.getText();
+                String tr_drv_AT=drvvar.getText();
+                String tr_br_code=brcodevar.getText();
+                try{
+
+                    String sql="UPDATE trip SET tr_departure='"+tr_departure+"',tr_return='"+tr_return+"',tr_maxseats='"+tr_maxseats+"'tr_cost='"+tr_cost+"',tr_gui_AT='"+tr_gui_AT+"',tr_drv_AT='"+tr_drv_AT+"',tr_br_code='"+tr_br_code+"'"
+                            +"WHERE tr_id="+tr_id;
+                    if( tr_br_code.isEmpty() || tr_cost.isEmpty()  || tr_departure.isEmpty() || tr_return.isEmpty() || tr_gui_AT.isEmpty()  || tr_maxseats.isEmpty() || tr_drv_AT.isEmpty()){
+
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        tridvar.setText("");
+                        departurevar.setText("");
+                        returnvar.setText("");
+                        seatsvar.setText("");
+                        costvar.setText("");
+                        brcodevar.setText("");
+                        guivar.setText("");
+                        drvvar.setText("");
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+
+public class travel_to extends  JDialog{
+    private JPanel panel1;
+    private JTextField totrvar;
+    private JTextField dstvar;
+    private JTextField arrivalvar;
+    private JTextField departurevar;
+    private JButton INSERTButton;
+    private JButton PRINTButton;
+    private JButton DELETEButton;
+    private JButton UPDATEButton;
+
+    public travel_to(JFrame parent) {
+        super(parent);
+        setTitle("TRAVEL_TO");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+
+                String to_tr_id=totrvar.getText();
+                String to_dst_id=dstvar.getText();
+                String to_arrival=arrivalvar.getText();
+                String to_departure=departurevar.getText();
+
+                if(to_arrival.isEmpty() || to_departure.isEmpty() || to_tr_id.isEmpty() || to_dst_id.isEmpty() ){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    totrvar.setText("");
+                    departurevar.setText("");
+                    dstvar.setText("");
+                    arrivalvar.setText("");
+
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO travel_to(to_tr_id,to_dst_id,to_arrival,to_departure) VALUES(?,?,?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,totrvar.getText());
+                        st.setString(2,dstvar.getText());
+                        st.setString(3,arrivalvar.getText());
+                        st.setString(4,departurevar.getText());
+
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+
+            }
+        });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+
+                String to_tr_id=totrvar.getText();
+                String to_dst_id=dstvar.getText();
+                String to_arrival=arrivalvar.getText();
+                String to_departure=departurevar.getText();
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM travel_to WHERE to_tr_id=? ";
+                    if( to_arrival.isEmpty() || to_departure.isEmpty()  || to_dst_id.isEmpty() ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,totrvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        totrvar.setText("");
+                        arrivalvar.setText("");
+                        departurevar.setText("");
+                        dstvar.setText("");
+
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+
+                String to_tr_id=totrvar.getText();
+                String to_dst_id=dstvar.getText();
+                String to_arrival=arrivalvar.getText();
+                String to_departure=departurevar.getText();
+                try{
+
+                    String sql="UPDATE travel_to SET to_dst_id='"+to_dst_id+"',to_arrival='"+to_arrival+"',to_departure='"+to_departure+"'"
+                            +"WHERE to_tr_id="+to_tr_id;
+                    if( to_arrival.isEmpty() || to_departure.isEmpty()  || to_dst_id.isEmpty() ){
+
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        totrvar.setText("");
+                        dstvar.setText("");
+                        arrivalvar.setText("");
+                        departurevar.setText("");
+
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class reservation_offers extends JDialog{
+    private JPanel panel1;
+    private JTextField residvar;
+    private JTextField namevar;
+    private JTextField lnamevar;
+    private JTextField depositvar;
+    private JTextField offeridvar;
+    private JButton INSERTButton;
+    private JButton PRINTButton;
+    private JButton UPDATEButton;
+    private JButton DELETEButton;
+
+    public reservation_offers(JFrame parent) {
+        super(parent);
+        setTitle("RESERVATION_OFFERS");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String res_offer_id=residvar.getText();
+                String name=namevar.getText();
+                String lname=lnamevar.getText();
+                String deposit=depositvar.getText();
+                String offer_id=offeridvar.getText();
+
+                if(res_offer_id.isEmpty() || name.isEmpty() || lname.isEmpty() || offer_id.isEmpty() || deposit.isEmpty()){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    residvar.setText("");
+                    namevar.setText("");
+                    lnamevar.setText("");
+                    offeridvar.setText("");
+                    depositvar.setText("");
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO reservation_offers(res_offer_id,name,lname,offer_id,deposit) VALUES(?,?,?,?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,residvar.getText());
+                        st.setString(2,namevar.getText());
+                        st.setString(3,lnamevar.getText());
+                        st.setString(4,offeridvar.getText());
+                        st.setString(5,depositvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+
+            }
+        });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String res_offer_id=residvar.getText();
+                String name=namevar.getText();
+                String lname=lnamevar.getText();
+                String deposit=depositvar.getText();
+                String offer_id=offeridvar.getText();
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM reservation_offers WHERE res_offer_id=? ";
+                    if(name.isEmpty() || lname.isEmpty()  || deposit.isEmpty()  || offer_id.isEmpty() ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,residvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        residvar.setText("");
+                        offeridvar.setText("");
+                        namevar.setText("");
+                        lnamevar.setText("");
+                        depositvar.setText("");
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+
+
+            }
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String res_offer_id=residvar.getText();
+                String name=namevar.getText();
+                String lname=lnamevar.getText();
+                String deposit=depositvar.getText();
+                String offer_id=offeridvar.getText();
+                try{
+
+                    String sql="UPDATE reservation_offers SET name='"+name+"',lname='"+lname+"',deposit='"+deposit+"',offer_id='"+offer_id+"'"
+                            +"WHERE res_offer_id="+res_offer_id;
+                    if( name.isEmpty() || lname.isEmpty()  || deposit.isEmpty() || offer_id.isEmpty()){
+
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        residvar.setText("");
+                        depositvar.setText("");
+                        namevar.setText("");
+                        lnamevar.setText("");
+                        offeridvar.setText("");
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class reservation extends  JDialog{
+    private JPanel panel1;
+    private JTextField residvar;
+    private JTextField seatnumvar;
+    private JTextField namevar;
+    private JTextField lnamevar;
+    private JTextField adultvar;
+    private JButton INSERTButton;
+    private JButton PRINTButton;
+    private JButton UPDATEButton;
+    private JButton DELETEButton;
+
+    public reservation(JFrame parent) {
+        super(parent);
+        setTitle("RESERVATION");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String res_tr_id=residvar.getText();
+                String res_setnum=seatnumvar.getText();
+                String res_name=namevar.getText();
+                String res_lname=lnamevar.getText();
+                String res_isadult=adultvar.getText();
+
+                if(res_isadult.isEmpty() || res_lname.isEmpty() || res_name.isEmpty() || res_tr_id.isEmpty() || res_setnum.isEmpty()){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    adultvar.setText("");
+                    namevar.setText("");
+                    lnamevar.setText("");
+                    residvar.setText("");
+                    seatnumvar.setText("");
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO reservation(res_tr_id,res_seatnum,res_name,res_lname,res_isadult) VALUES(?,?,?,?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,residvar.getText());
+                        st.setString(2,seatnumvar.getText());
+                        st.setString(3,namevar.getText());
+                        st.setString(4,lnamevar.getText());
+                        st.setString(5,adultvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+
+            }
+        });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+
+                String res_tr_id=residvar.getText();
+                String res_setnum=seatnumvar.getText();
+                String res_name=namevar.getText();
+                String res_lname=lnamevar.getText();
+                String res_isadult=adultvar.getText();
+
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM reservation WHERE res_tr_id=? ";
+                    if(res_isadult.isEmpty() || res_lname.isEmpty()  || res_name.isEmpty()  || res_setnum.isEmpty() ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,residvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        residvar.setText("");
+                        seatnumvar.setText("");
+                        namevar.setText("");
+                        lnamevar.setText("");
+                        seatnumvar.setText("");
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+
+                String res_tr_id=residvar.getText();
+                String res_setnum=seatnumvar.getText();
+                String res_name=namevar.getText();
+                String res_lname=lnamevar.getText();
+                String res_isadult=adultvar.getText();
+                try{
+
+
+                    String sql="UPDATE reservation SET res_seatnum='"+res_setnum+"',res_name='"+res_name+"',res_lname='"+res_lname+"',res_isadult='"+res_isadult+"'"
+                            +"WHERE res_tr_id="+res_tr_id;
+                    if( res_isadult.isEmpty() || res_lname.isEmpty()  || res_name.isEmpty() || res_setnum.isEmpty()){
+
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        residvar.setText("");
+                        seatnumvar.setText("");
+                        namevar.setText("");
+                        lnamevar.setText("");
+                        adultvar.setText("");
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class Print extends  JDialog {
+    private JPanel panel1;
+    private JTable table1;
+    private JButton EXITButton;
+    private JScrollPane showtable;
+
+    public Print(JFrame parent) {
+        setTitle("Display");
+        setContentPane(panel1);
+        setContentPane(table1);
+        setContentPane(showtable);
+        setMinimumSize(new Dimension(450, 474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setVisible(true);
+
+        try{
+            String sql="SELECT * FROM worker";
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+            PreparedStatement pt=con.prepareStatement(sql);
+            ResultSet rs=pt.executeQuery();
+            DefaultTableModel model= (DefaultTableModel) table1.getModel();
+            while(rs.next()){
+                model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)});
+            }
+        }catch (Exception e){System.out.println("Error : "+e.getMessage());}
+
+        EXITButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+    }
+
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+
+public class manages extends  JDialog {
+    private JPanel panel1;
+    private JButton PRINTButton1;
+    private JTextField mngATvar;
+    private JTextField mngbrvar;
+    private JButton DELETEButton;
+    private JButton UPDATEButton;
+    private JButton INSERTButton;
+
+    public manages(JFrame parent) {
+        super(parent);
+        setTitle("MANAGES");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+
+
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String mng_br_code=mngbrvar.getText();
+                String mng_AT=mngATvar.getText();
+                if(mng_AT.isEmpty() || mng_br_code.isEmpty() ){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    mngbrvar.setText("");
+                    mngATvar.setText("");
+
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO manages(mng_adm_AT,mng_br_code) VALUES(?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,mngATvar.getText());
+                        st.setString(2,mngbrvar.getText());
+
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+
+            }
+        });
+
+
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String mng_br_code=mngbrvar.getText();
+                String mng_AT=mngATvar.getText();
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM manages WHERE mng_adm_AT=? ";
+                    if( mng_br_code.isEmpty()   ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,mngbrvar.getText());
+                        st.setString(2,mngATvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        mngbrvar.setText("");
+                        mngATvar.setText("");
+
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+
+
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String mng_br_code=mngbrvar.getText();
+                String mng_AT=mngATvar.getText();
+                try{
+
+                    String sql="UPDATE worker SET mng_br_code='"+mng_br_code+"'"
+                            +"WHERE mng_admin_AT="+mng_AT;
+                    if( mng_br_code.isEmpty()  ){
+
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        mngbrvar.setText("");
+                        mngATvar.setText("");
+
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+            }
+        });
+        PRINTButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class offers extends  JDialog{
+    private JPanel panel1;
+    private JTextField offeridvar;
+    private JTextField startvar;
+    private JTextField endvar;
+    private JTextField costvar;
+    private JTextField dstidvar;
+    private JButton PRINTButton;
+    private JButton UPDATEButton;
+    private JButton DELETEButton;
+    private JButton INSERTButton;
+
+    public offers(JFrame parent) {
+        super(parent);
+        setTitle("OFFERS");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String offer_id=offeridvar.getText();
+                String start_date=startvar.getText();
+                String end_date=endvar.getText();
+                String cost_per=costvar.getText();
+                String offer_dst_id=dstidvar.getText();
+
+                if(offer_id.isEmpty() || offer_dst_id.isEmpty() || end_date.isEmpty() || start_date.isEmpty() || cost_per.isEmpty()){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    offeridvar.setText("");
+                    startvar.setText("");
+                    endvar.setText("");
+                    costvar.setText("");
+                    dstidvar.setText("");
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO offers(offer_id,start_date,end_date,cost_per,offer_dst_id) VALUES(?,?,?,?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,offeridvar.getText());
+                        st.setString(2,startvar.getText());
+                        st.setString(3,endvar.getText());
+                        st.setString(4,costvar.getText());
+                        st.setString(5,dstidvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+
+            }
+        });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String offer_id=offeridvar.getText();
+                String start_date=startvar.getText();
+                String end_date=endvar.getText();
+                String cost_per=costvar.getText();
+                String offer_dst_id=dstidvar.getText();
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM offers WHERE offer_id=? ";
+                    if( offer_dst_id.isEmpty() || end_date.isEmpty()  || start_date.isEmpty() || cost_per.isEmpty() ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,offeridvar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        offeridvar.setText("");
+                        startvar.setText("");
+                        endvar.setText("");
+                        costvar.setText("");
+                        dstidvar.setText("");
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+
+
+            }
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String offer_id=offeridvar.getText();
+                String start_date=startvar.getText();
+                String end_date=endvar.getText();
+                String cost_per=costvar.getText();
+                String offer_dst_id=dstidvar.getText();
+                try{
+
+                    String sql="UPDATE worker SET start_date='"+start_date+"',end_date='"+end_date+"',cost_per='"+cost_per+"',offer_dst_id='"+offer_dst_id+"'"
+                            +"WHERE offer_id="+offer_id;
+                    if( end_date.isEmpty() || start_date.isEmpty()  || cost_per.isEmpty() || offer_dst_id.isEmpty()){
+
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        offeridvar.setText("");
+                        startvar.setText("");
+                        endvar.setText("");
+                        costvar.setText("");
+                        offeridvar.setText("");
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+
+public class worker extends  JDialog{
+    private JPanel panel1;
+    private JTextField wrk_AT;
+    private JTextField wrk_name;
+    private JTextField wrk_lname;
+    private JTextField wrk_salary;
+    private JTextField wrk_br_code;
+    private JButton wrkprint;
+    private JButton wrkupdate;
+    private JButton wrkdelete;
+    private JButton wrkinsert;
+
+
+    public worker(JFrame parent) {
+        super(parent);
+        setTitle("WORKER");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+
+        wrkinsert.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String wrkAT=wrk_AT.getText();
+                String wrkname=wrk_name.getText();
+                String wrklname=wrk_lname.getText();
+                String wrksalary=wrk_salary.getText();
+                String wrkbrcode=wrk_br_code.getText();
+                if(wrkAT.isEmpty() || wrkname.isEmpty() || wrklname.isEmpty() || wrksalary.isEmpty() || wrkbrcode.isEmpty()){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    wrk_AT.setText("");
+                    wrk_name.setText("");
+                    wrk_lname.setText("");
+                    wrk_salary.setText("");
+                    wrk_br_code.setText("");
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO worker(wrk_AT,wrk_name,wrk_lname,wrk_salary,wrk_br_code) VALUES(?,?,?,?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,wrk_AT.getText());
+                        st.setString(2,wrk_name.getText());
+                        st.setString(3,wrk_lname.getText());
+                        st.setString(4,wrk_salary.getText());
+                        st.setString(5,wrk_br_code.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+            }
+        });
+        wrkdelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String wrkAT=wrk_AT.getText();
+                String wrkname=wrk_name.getText();
+                String wrklname=wrk_lname.getText();
+                String wrksalary=wrk_salary.getText();
+                String wrkbrcode=wrk_br_code.getText();
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM worker WHERE wrk_AT=? ";
+                    if( wrkname.isEmpty() || wrklname.isEmpty()  || wrkbrcode.isEmpty() || wrksalary.isEmpty()){
+                    PreparedStatement st=con.prepareStatement(sql);
+                    st.setString(1,wrk_AT.getText());
+
+
+                    st.executeUpdate();
+                    JOptionPane.showMessageDialog(null,"Recored deleted");
+                    wrk_AT.setText("");
+                    wrk_name.setText("");
+                    wrk_lname.setText("");
+                    wrk_salary.setText("");
+                    wrk_br_code.setText("");
+                    con.close();}
+                }catch(Exception e){ System.out.println(e);}
+
+
+            }
+        });
+        wrkupdate.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String wrkAT=wrk_AT.getText();
+                String wrkname=wrk_name.getText();
+                String wrklname=wrk_lname.getText();
+                String wrksalary=wrk_salary.getText();
+                String wrkbrcode=wrk_br_code.getText();
+
+                try{
+
+                    String sql="UPDATE worker SET wrk_name='"+wrkname+"',wrk_lname='"+wrklname+"',wrk_br_code='"+wrkbrcode+"'"
+                            +"WHERE wrk_AT="+wrkAT;
+                    if( wrkname.isEmpty() || wrklname.isEmpty()  || wrkbrcode.isEmpty() || wrksalary.isEmpty()){
+
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    PreparedStatement st=con.prepareStatement(sql);
+                    st.executeUpdate();
+                    JOptionPane.showMessageDialog(null,"Recored updated");
+                        wrk_AT.setText("");
+                        wrk_name.setText("");
+                        wrk_lname.setText("");
+                        wrk_salary.setText("");
+                        wrk_br_code.setText("");
+                    con.close();
+
+                }}catch(Exception e){ System.out.println(e);}
+
+                }
+        });
+        wrkprint.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              Print print=new Print(null);
+              print.show();
+            }
+        });setVisible(true);
+
+    }
+}
+
+
+
+
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class phone extends  JDialog{
+    private JPanel panel1;
+    private JTextField phbrvar;
+    private JTextField numvar;
+    private JButton PRINTButton;
+    private JButton UPDATEButton;
+    private JButton INSERTButton;
+    private JButton DELETEButton;
+
+    public phone(JFrame parent) {
+        super(parent);
+        setTitle("PHONE");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+
+                String ph_br_code=phbrvar.getText();
+                String ph_number=numvar.getText();
+
+                if(ph_br_code.isEmpty() || ph_number.isEmpty() ){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    phbrvar.setText("");
+                    numvar.setText("");
+
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO phone(ph_br_code,ph_number) VALUES(?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,phbrvar.getText());
+                        st.setString(2,numvar.getText());
+
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+
+
+            }
+        });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+
+                String ph_br_code=phbrvar.getText();
+                String ph_number=numvar.getText();
+
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM phone WHERE ph_br_code=? ";
+                    if( ph_number.isEmpty()   ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,phbrvar.getText());
+
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        phbrvar.setText("");
+                        numvar.setText("");
+
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+            }
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+
+                String ph_br_code=phbrvar.getText();
+                String ph_number=numvar.getText();
+                try{
+
+                    String sql="UPDATE phone SET ph_number='"+ph_number+"'"
+                            +"WHERE ph_br_code="+ph_br_code;
+                    if(ph_number.isEmpty()  ){
+
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        phbrvar.setText("");
+                        numvar.setText("");
+
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class language extends  JDialog{
+    private JPanel panel1;
+    private JTextField lngguivar;
+    private JTextField lngvar;
+    private JButton UPDATEButton;
+    private JButton PRINTButton;
+    private JButton DELETEButton;
+    private JButton INSERTButton;
+
+    public language(JFrame parent) {
+        super(parent);
+        setTitle("LANGUAGE");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450,474));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+
+        INSERTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String lng_AT=lngguivar.getText();
+                String lng=lngvar.getText();
+                if(lng_AT.isEmpty() || lng.isEmpty() ){
+                    JOptionPane.showMessageDialog(null,"Enter all data");
+                    lngguivar.setText("");
+                    lngvar.setText("");
+
+                }else{
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        //here travel_agency is database name, root is username and 28022002 password
+                        String sql="INSERT INTO language(lng_gui_AT,lng_language) VALUES(?,?)";
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,lngguivar.getText());
+                        st.setString(2,lngvar.getText());
+
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored added");
+                        con.close();
+                    }catch(Exception e){ System.out.println(e);}
+                }
+
+            }
+        });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String lng_AT=lngguivar.getText();
+                String lng=lngvar.getText();
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                    //here travel_agency is database name, root is username and 28022002 password
+                    String sql="DELETE FROM language WHERE lng_gui_AT=? ";
+                    if( lng.isEmpty()   ){
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.setString(1,lngguivar.getText());
+
+
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored deleted");
+                        lngguivar.setText("");
+                        lngvar.setText("");
+
+                        con.close();}
+                }catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        UPDATEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent a) {
+                String lng_AT=lngguivar.getText();
+                String lng=lngvar.getText();
+                try{
+
+                    String sql="UPDATE language SET lng_language='"+lng+"'"
+                            +"WHERE lng_gui_AT="+lng_AT;
+                    if(lng.isEmpty()  ){
+
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/travel_agency", "root", "28022002");
+                        PreparedStatement st=con.prepareStatement(sql);
+                        st.executeUpdate();
+                        JOptionPane.showMessageDialog(null,"Recored updated");
+                        lngvar.setText("");
+                        lngguivar.setText("");
+
+                        con.close();
+
+                    }}catch(Exception e){ System.out.println(e);}
+
+            }
+        });
+        PRINTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+public class InsertPanel extends JDialog {
+    private JPanel panel1;
+    private JButton ok1;
+    private JButton ok2;
+    private JButton ok3;
+    private JButton ok4;
+    private JButton ok5;
+    private JButton ok6;
+    private JButton ok7;
+    private JButton ok8;
+    private JButton ok9;
+    private JButton ok10;
+    private JButton ok11;
+    private JButton ok12;
+    private JButton ok13;
+    private JButton ok14;
+    private JButton ok15;
+    private JButton ok16;
+    private JButton ok17;
+    private JButton ok18;
+    private JButton CANCELButton;
+
+
+    public InsertPanel(JFrame parent) {
+        super(parent);
+        setTitle("ACTION");
+        setContentPane(panel1);
+        setMinimumSize(new Dimension(450, 650));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        ok1.addActionListener(new ActionListener() {//admin
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                admin admin=new admin(null);
+                admin.show();
+
+            }
+        });
+        ok2.addActionListener(new ActionListener() {//branch
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                branch branch=new branch(null);
+                branch.show();
+            }
+        });
+        ok3.addActionListener(new ActionListener() {//destination
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                destination dst=new destination(null);
+                dst.show();
+
+            }
+        });
+        ok4.addActionListener(new ActionListener() {//driver
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                driver drv=new driver(null);
+                drv.show();
+
+            }
+        });
+        ok5.addActionListener(new ActionListener() {//event
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                event event=new event(null);
+                event.show();
+
+            }
+        });
+        ok6.addActionListener(new ActionListener() {//guide
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guide gui=new guide(null);
+                gui.show();
+
+            }
+        });
+
+        ok7.addActionListener(new ActionListener() {//it
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                it it =new it(null);
+                it.show();
+
+            }
+        });
+        ok8.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {//language
+                language lng=new language(null);
+                lng.show();
+
+            }
+        });
+        ok9.addActionListener(new ActionListener() {//log_reservation
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        ok10.addActionListener(new ActionListener() {//log_trip
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        ok11.addActionListener(new ActionListener() {//manages
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                manages mng=new manages(null);
+                mng.show();
+
+            }
+        });
+        ok12.addActionListener(new ActionListener() {//offers
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                offers offers=new offers(null);
+                offers.show();
+
+            }
+        });
+        ok13.addActionListener(new ActionListener() {//phone
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                phone phone=new phone(null);
+                phone.show();
+
+            }
+        });
+        ok14.addActionListener(new ActionListener() {//reservation
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reservation res=new reservation(null);
+                res.show();
+
+            }
+        });
+        ok15.addActionListener(new ActionListener() {//reservation_offers
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reservation_offers resoffers=new reservation_offers(null);
+                resoffers.show();
+
+            }
+        });
+        ok16.addActionListener(new ActionListener() {//travel_to
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                travel_to totr=new travel_to(null);
+                totr.show();
+            }
+        });
+        ok17.addActionListener(new ActionListener() {//trip
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                trip tr=new trip(null);
+                tr.show();
+
+            }
+        });
+        ok18.addActionListener(new ActionListener() {//worker
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                worker worker=new worker(null);
+                worker.show();
+            }
+        });
+
+        CANCELButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });setVisible(true);
+    }
+
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+
+public class LoginForm extends JDialog{
+    private JPanel loginpanel;
+    private JTextField tfusername;
+    private JPasswordField tfpassword;
+    private JButton login;
+    private JButton cancel;
+
+    public LoginForm(JFrame parent){
+        super(parent);
+        setTitle("Login");
+        setContentPane(loginpanel);
+        setMinimumSize(new Dimension(450,250));
+        setModal(true);
+        setLocationRelativeTo(parent);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+        login.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username=tfusername.getText();
+                String password=tfpassword.getText();
+
+                user=getUser(username,password);
+                if(user!=null){
+                    dispose();
+                }else{
+                    JOptionPane.showMessageDialog(LoginForm.this,"Username or Password invalid or incomplete fields","try again",JOptionPane.ERROR_MESSAGE);
+                    tfusername.setText("");
+                    tfpassword.setText("");
+                }
+
+            }
+        });
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });setVisible(true);
+    }
+
+    public static User user;
+    private User getUser(String username,String password){
+        User user=null;
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Enter all fields", "try again!", JOptionPane.ERROR_MESSAGE);
+            tfusername.setText("");
+            tfpassword.setText("");
+            return null;
+        }
+            try{
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con=DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/travel_agency","root","28022002");
+                //here travel_agency is database name, root is username and 28022002 password
+                Statement st=con.createStatement();
+                ResultSet rs=st.executeQuery( "SELECT * FROM it WHERE it_AT='"+username+"'AND password='"+password+"'");
+                if (rs.next()) {
+                    user = new User();
+                    user.username = rs.getString("it_AT");
+                    user.password = rs.getString("password");
+                    dispose();
+                }
+                while(rs.next())
+                    System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));
+                con.close();
+                st.close();
+            }catch(Exception e){ System.out.println(e);}
+
+        return user;
+        }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        LoginForm loginForm=new LoginForm(null);
+        User user=LoginForm.user;
+        if(user!=null){
+            System.out.println("Successful Authentication!\nUser AT:"+user.username);
+            InsertPanel insertPanel=new InsertPanel(null);
+            insertPanel.show();
+
+
+        }else{
+            System.out.println("Authentication Canceled");
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
